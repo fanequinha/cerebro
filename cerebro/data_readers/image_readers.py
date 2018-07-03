@@ -18,8 +18,8 @@ def read_image_tensorflow(file_name, height=299, width=299, mean=0, std=255):
             file_reader, channels=3, name="jpeg_reader")
     float_caster = tf.cast(image_reader, tf.float32)
     dims_expander = tf.expand_dims(float_caster, 0)
-    resized = tf.image.resize_bilinear(dims_expander, [input_height, input_width])
-    normalized = tf.divide(tf.subtract(resized, [input_mean]), [input_std])
+    resized = tf.image.resize_bilinear(dims_expander, [height, width])
+    normalized = tf.divide(tf.subtract(resized, [mean]), [std])
     sess = tf.Session()
     return sess.run(normalized)
 
