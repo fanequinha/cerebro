@@ -65,10 +65,11 @@ class TensorFlowModel(abc.ABC):
             tf.import_graph_def(graph_def, name='')
 
         self.input_tensor = self.graph.get_tensor_by_name("{}:0".format(self.input_node))
-        self.output_tensors = [self.graph.get_tensor_by_name("{}:0".format(x)) for x in self.output_nodes]
+        self.output_tensors = [
+            self.graph.get_tensor_by_name("{}:0".format(x)) for x in self.output_nodes]
 
     def setup_session(self):
-        """ Create and store a TensorFlow session with warm start.
+        """ Creates and stores a TensorFlow session with warm start.
         """
         self.session = tf.Session(graph=self.graph)
         
@@ -78,8 +79,9 @@ class TensorFlowModel(abc.ABC):
             {self.input_tensor: np.random.rand(*self.input_shape)})
 
     def get_predictions(self, image):
-        """
+        """ Extracts raw predictions from the TensorFlow graph for given image.
         :param image:
+            Expected to have self.input_shape
         :return:
         """
         predictions = self.session.run(
@@ -93,7 +95,11 @@ class TensorFlowModel(abc.ABC):
         pass
     
     def __call__(self, image):
+        """ Obtains processed predictions for given image.
+        :param image:
+            Expected to have self.input_shape
+        :return:
         """
-        """
-        assert list(image.shape) == list(self.input_shape)
+        if list(image.shape) != list(self.input_shape):
+            raise ValueError("image.shape does not match the expected input_shape")
         return self.postprocess_predictions(self.get_predictions(image))
