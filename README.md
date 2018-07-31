@@ -11,4 +11,4 @@ Each folder in this mono-repo is a development area for `fanequiña`, currently 
 A Machine Learning model & engine created to make `fanequiña` aware of it's surroundings while navigating.
 
 ## Commander
-A [dronekit](http://python.dronekit.io/) project created to work together with `Cerebro` that would command `fanequiña` using [pixhawk](https://pixhawk.org/).
+[dronekit](http://python.dronekit.io/)'s project created to work together with `Mastermaind` to command `fanequiña` using [pixhawk](https://pixhawk.org/).
