@@ -1,0 +1,48 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "613d8a1d73ac22dc3143e8adfe0ab6395b63b5997e9966ed7aea0a54ee76a432"
+        },
+        "pipfile-spec": 6,
+        "requires": {
+            "python_version": "2.7"
+        },
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "dronekit": {
+            "hashes": [
+                "sha256:8bc3796a10049fd1a832bab15c092f04cd843ce0013a85a0b188d9b6ce3f734e",
+                "sha256:91c19b4559ae536f2020c4e77bb16ac977a7ca7a6e43b7392acef6061cebf578"
+            ],
+            "index": "pypi",
+            "version": "==2.9.1"
+        },
+        "future": {
+            "hashes": [
+                "sha256:3d3b193f20ca62ba7d8782589922878820d0a023b885882deec830adbf639b97"
+            ],
+            "version": "==0.15.2"
+        },
+        "monotonic": {
+            "hashes": [
+                "sha256:668088baea217e1e89edecd12c9a913ab4678419ad4eca378dcef1e4059a44f3",
+                "sha256:c0e1ceca563ca6bb30b0fb047ee1002503ae6ad3585fc9c6af37a8f77ec274ba"
+            ],
+            "version": "==1.2"
+        },
+        "pymavlink": {
+            "hashes": [
+                "sha256:7c22f316e2282f1dff9f0312d819c5f6bcb565141a8c0f7b741e31c242037379"
+            ],
+            "version": "==2.0.6"
+        }
+    },
+    "develop": {}
+}
