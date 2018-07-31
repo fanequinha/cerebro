@@ -6,7 +6,7 @@ This mono-repo contains the python related areas of `fanequiña`, that is an [A 
 
 Each folder in this mono-repo is a development area for `fanequiña`, currently we are working on the following areas:
 
-## Cerebro
+## Mastermind 
 A Machine Learning model & engine created to make `fanequiña` aware of it's surroundings while navigating.
 
 ## Commander
