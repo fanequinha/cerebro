@@ -1,0 +1,14 @@
+---
+sudo: false
+language: python
+matrix:
+  include:
+    - python: 2.7
+      env: TOXENV=flake8
+    - python: 2.7
+      env: TOXENV=isort
+install:
+  - pip install tox
+script:
+  - cd commander
+  - tox -e $TOXENV
