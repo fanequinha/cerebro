@@ -1,4 +1,5 @@
 # cerebro
+![jenkins status](https://travis-ci.org/fanequinha/cerebro.svg?branch=master)
 
 ![A Industriosa](https://i.imgur.com/DZ3NuFg.png)
 
