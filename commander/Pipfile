@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 dronekit = "*"
+dronekit-sitl = "*"
+pyserial = "*"
 
 [dev-packages]
 
