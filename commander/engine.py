@@ -2,20 +2,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
+import argparse
 import math
 
 from dronekit import LocationGlobalRelative, VehicleMode, connect
 
-# @todo move this to settings.py
-DEV = True
-
+import settings
 
 class Engine(object):
 
     def __init__(self, connection_string=""):
         self.connection_string = connection_string
 
-        if DEV:
+        if settings.DEVELOPMENT:
             import dronekit_sitl
             sitl = dronekit_sitl.start_default()
             self.connection_string = sitl.connection_string()
@@ -83,5 +82,12 @@ class Mision(Engine):
 
 
 if __name__ == "__main__":
-    engine = Mision("")
+
+    parser = argparse.ArgumentParser(description='Connect to Pixhawk')
+    parser.add_argument('--serialport', type=str,
+                        help='Serial port to connect')
+
+    args = parser.parse_args()
+
+    engine = Mision(args.serialport)
     engine.connect()
