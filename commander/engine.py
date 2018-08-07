@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
+import argparse
 import math
 
 from dronekit import LocationGlobalRelative, VehicleMode, connect
@@ -93,5 +94,15 @@ class Mision(Engine):
 
 if __name__ == "__main__":
 
-    engine = Mision('/dev/tty.SLAB_USBtoUART', baudrate=57600)
+    parser = argparse.ArgumentParser(description='Command line program to interact with the Pixhawk')
+
+    parser.add_argument('--connect', action="store_true", default=False, help="Vehicle connection. If not specified other parameters, SITL automatically started and used.")
+    parser.add_argument("-s", "--serial-port", action="store", help="/dev/tty.SLAB_USBtoUART")
+    parser.add_argument('-b',"--baud-rate", action="store", type=int, help="Serial baud rate: 57600 | Usb connection: 115200")
+
+    results = parser.parse_args()
+    print(results)
+    print(results.serial_port)
+    print(results.baud_rate)
+    engine = Mision(results.serial_port, baudrate=results.baud_rate)
     engine.connect()
