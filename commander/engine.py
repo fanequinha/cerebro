@@ -11,8 +11,9 @@ import settings
 
 class Engine(object):
 
-    def __init__(self, connection_string=""):
+    def __init__(self, connection_string="", baudrate=57600):
         self.connection_string = connection_string
+        self.baudrate = baudrate
 
         if settings.DEVELOPMENT:
             import dronekit_sitl
@@ -21,9 +22,17 @@ class Engine(object):
             return
 
     def connect(self):
-        self._vehicle = connect(self.connection_string)
+        self._vehicle = connect(self.connection_string, baud=self.baudrate,
+            wait_ready=False)
+
+        #TODO refactor
+        while not self._vehicle.attitude.pitch:
+            import time
+            time.sleep(20)
+        print(self._vehicle.attitude)
+        print(self._vehicle.version)
+        print(self._vehicle.mode.name)
         self._vehicle.mode = VehicleMode("GUIDED")
-        self._vehicle.wait_ready()
 
     @property
     def vehicle(self):
@@ -83,11 +92,5 @@ class Mision(Engine):
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description='Connect to Pixhawk')
-    parser.add_argument('--serialport', type=str,
-                        help='Serial port to connect')
-
-    args = parser.parse_args()
-
-    engine = Mision(args.serialport)
+    engine = Mision('/dev/tty.SLAB_USBtoUART', baudrate=57600)
     engine.connect()

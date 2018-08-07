@@ -1,1 +1,1 @@
-DEVELOPMENT = True
+DEVELOPMENT = False
