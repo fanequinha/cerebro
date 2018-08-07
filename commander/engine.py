@@ -2,29 +2,37 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
+import argparse
 import math
 
 from dronekit import LocationGlobalRelative, VehicleMode, connect
 
-# @todo move this to settings.py
-DEV = True
-
+import settings
 
 class Engine(object):
 
-    def __init__(self, connection_string=""):
+    def __init__(self, connection_string="", baudrate=57600):
         self.connection_string = connection_string
+        self.baudrate = baudrate
 
-        if DEV:
+        if settings.DEVELOPMENT:
             import dronekit_sitl
             sitl = dronekit_sitl.start_default()
             self.connection_string = sitl.connection_string()
             return
 
     def connect(self):
-        self._vehicle = connect(self.connection_string)
+        self._vehicle = connect(self.connection_string, baud=self.baudrate,
+            wait_ready=False)
+
+        #TODO refactor
+        while not self._vehicle.attitude.pitch:
+            import time
+            time.sleep(20)
+        print(self._vehicle.attitude)
+        print(self._vehicle.version)
+        print(self._vehicle.mode.name)
         self._vehicle.mode = VehicleMode("GUIDED")
-        self._vehicle.wait_ready()
 
     @property
     def vehicle(self):
@@ -83,5 +91,6 @@ class Mision(Engine):
 
 
 if __name__ == "__main__":
-    engine = Mision("")
+
+    engine = Mision('/dev/tty.SLAB_USBtoUART', baudrate=57600)
     engine.connect()
