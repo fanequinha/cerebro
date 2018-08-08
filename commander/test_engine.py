@@ -1,8 +1,8 @@
-from engine import Mision
+from engine import Engine
 
 
 def test_connection():
-    engine = Mision()
-    engine.connect()
+    engine = Engine()
+    engine.connect(wait_ready=False)
 
     assert engine.vehicle is not None

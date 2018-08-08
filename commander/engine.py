@@ -19,12 +19,11 @@ class Engine(object):
             import dronekit_sitl
             sitl = dronekit_sitl.start_default()
             self.connection_string = sitl.connection_string()
-            return
 
-    def connect(self):
+    def connect(self, wait_ready=True):
         self._vehicle = connect(self.connection_string,
                                 baud=self.baudrate,
-                                wait_ready=True)
+                                wait_ready=wait_ready)
 
     @property
     def vehicle(self):
