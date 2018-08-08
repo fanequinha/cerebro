@@ -12,3 +12,49 @@ A Machine Learning model & engine created to make `fanequiña` aware of it's sur
 
 ## Commander
 [dronekit](http://python.dronekit.io/)'s project created to work together with `Mastermaind` to command `fanequiña` using [pixhawk](https://pixhawk.org/).
+
+* Requirements
+
+    - Python 2.7
+    - Pipenv (https://docs.pipenv.org/)
+
+
+* Installation and environment activation
+
+    ```
+        >cd commander/
+        >pipenv install
+        >pipenv shell
+    ```
+
+* Configure connection environment
+
+    You must check what port you have to connect depending your OS ((http://python.dronekit.io/guide/connecting_vehicle.html#get-started-connecting))
+
+    You can configure your own environment with your custom file `.env`:
+
+    ```
+        >copy env.sample .env
+        >vim .env
+    ```
+
+    Activate the environment:
+
+    ```
+        >export `cat .env`
+    ```
+
+
+* First connection
+
+    ```
+        >cd commander/
+        >./main.py
+    ```
+
+* Listen location, attitude, velocity and gps
+
+    ```
+        >cd commander/
+        >./main.py -l
+    ```
