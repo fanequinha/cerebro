@@ -11,6 +11,8 @@ pyserial = "*"
 [dev-packages]
 "flake8" = "*"
 isort = "*"
+pylint = "<2.0.0"
+"autopep8" = "*"
 
 [requires]
 python_version = "2.7"

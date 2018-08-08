@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-import argparse
 import math
 
-from dronekit import LocationGlobalRelative, VehicleMode, connect
+from dronekit import LocationGlobalRelative, connect
 
 import settings
 
@@ -26,15 +25,6 @@ class Engine(object):
         self._vehicle = connect(self.connection_string,
                                 baud=self.baudrate,
                                 wait_ready=False)
-
-        # TODO refactor
-        while not self._vehicle.attitude.pitch:
-            import time
-            time.sleep(20)
-        print(self._vehicle.attitude)
-        print(self._vehicle.version)
-        print(self._vehicle.mode.name)
-        self._vehicle.mode = VehicleMode("GUIDED")
 
     @property
     def vehicle(self):
@@ -90,19 +80,3 @@ class Mision(Engine):
     def set_final_location(self, lat, lon):
         self.final_lat = lat
         self.final_lon = lon
-
-
-if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description='Command line program to interact with the Pixhawk')
-
-    parser.add_argument('--connect', action="store_true", default=False, help="Vehicle connection. If not specified other parameters, SITL automatically started and used.")
-    parser.add_argument("-s", "--serial-port", action="store", help="/dev/tty.SLAB_USBtoUART")
-    parser.add_argument('-b',"--baud-rate", action="store", type=int, help="Serial baud rate: 57600 | Usb connection: 115200")
-
-    results = parser.parse_args()
-    print(results)
-    print(results.serial_port)
-    print(results.baud_rate)
-    engine = Mision(results.serial_port, baudrate=results.baud_rate)
-    engine.connect()
