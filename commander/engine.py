@@ -24,7 +24,7 @@ class Engine(object):
     def connect(self):
         self._vehicle = connect(self.connection_string,
                                 baud=self.baudrate,
-                                wait_ready=False)
+                                wait_ready=True)
 
     @property
     def vehicle(self):

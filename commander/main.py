@@ -15,9 +15,18 @@ def main():
 
     engine = Engine(connection_string, baudrate=baud_rate)
     engine.connect()
+    vehicle = engine.vehicle
 
-    while True:
-        print(engine.vehicle.attitude)
+    print(" Autopilot Firmware version: %s" % vehicle.version)
+    print(" System status: %s" % vehicle.system_status.state)
+    print(" Mode: %s" % vehicle.mode.name)
+    print(" Armed: %s" % vehicle.armed)
+
+    while arg_options.listen:
+        print(vehicle.location.global_frame)
+        print(vehicle.attitude)
+        print(" Velocity: %s" % vehicle.velocity)
+        print(vehicle.gps_0)
 
 
 def get_parser():
@@ -29,6 +38,8 @@ def get_parser():
         If not specified other parameters, SITL automatically started and used.""")
     parser.add_argument("-b", "--baud-rate", type=int,
                         help="Serial baud rate: 57600 | Usb connection: 115200")
+    parser.add_argument("-l", "--listen", action='store_true',
+                        help="Listen location, attitude, velocity and gps")
 
     return parser
 
