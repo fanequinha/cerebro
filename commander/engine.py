@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-import argparse
 import math
 
 from dronekit import LocationGlobalRelative, VehicleMode, connect
 
 import settings
+
 
 class Engine(object):
 
@@ -22,10 +22,11 @@ class Engine(object):
             return
 
     def connect(self):
-        self._vehicle = connect(self.connection_string, baud=self.baudrate,
-            wait_ready=False)
+        self._vehicle = connect(self.connection_string,
+                                baud=self.baudrate,
+                                wait_ready=False)
 
-        #TODO refactor
+        # TODO refactor
         while not self._vehicle.attitude.pitch:
             import time
             time.sleep(20)
