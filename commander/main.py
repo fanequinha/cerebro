@@ -1,7 +1,7 @@
 import argparse
 
 import settings
-from engine import Mision
+from engine import Engine
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     if arg_options.baud_rate:
         baud_rate = arg_options.baud_rate
 
-    engine = Mision(connection_string, baudrate=baud_rate)
+    engine = Engine(connection_string, baudrate=baud_rate)
     engine.connect()
 
     while True:

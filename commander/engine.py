@@ -51,7 +51,6 @@ class Mision(Engine):
     earth_radio = 6378137
 
     def __init__(self, *args, **kwargs):
-        # super(Mision, self).__init__(*args, **kwargs)
         super(Mision, self).__init__(*args, **kwargs)
         self.connect()
         self.set_start_point(
