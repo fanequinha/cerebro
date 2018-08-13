@@ -2,7 +2,6 @@ import pytest
 
 import settings
 
-
 @pytest.fixture
 def connection_parameters():
     connection_string = settings.DEFAULT_SERIAL_PORT
