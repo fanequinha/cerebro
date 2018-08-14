@@ -4,9 +4,6 @@ from engine import Engine
 
 
 def test_connection(connection_parameters):
-    import settings
-    print('settings 1 :', settings.DEVELOPMENT)
-
     engine = Engine(**connection_parameters)
     engine.connect(wait_ready=False)
 
@@ -15,7 +12,7 @@ def test_connection(connection_parameters):
     engine.vehicle.close()
 
 def test_wait_armable_vehicle(connection_parameters):
-    engine = Engine(*connection_parameters)
+    engine = Engine(**connection_parameters)
     engine.connect(wait_ready=False)
 
     while not engine.vehicle.is_armable:
@@ -27,7 +24,7 @@ def test_wait_armable_vehicle(connection_parameters):
     engine.vehicle.close()
 
 def test_vehicle_mode(connection_parameters):
-    engine = Engine(*connection_parameters)
+    engine = Engine(**connection_parameters)
     engine.connect(wait_ready=False)
 
     while not engine.vehicle.is_armable:
@@ -45,7 +42,7 @@ def test_vehicle_mode(connection_parameters):
     engine.vehicle.close()
 
 def test_vehicle_armed(connection_parameters):
-    engine = Engine(*connection_parameters)
+    engine = Engine(**connection_parameters)
     engine.connect(wait_ready=False)
 
     while not engine.vehicle.is_armable:
