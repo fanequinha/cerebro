@@ -11,6 +11,7 @@ def test_connection(connection_parameters):
 
     engine.vehicle.close()
 
+
 def test_wait_armable_vehicle(connection_parameters):
     engine = Engine(**connection_parameters)
     engine.connect(wait_ready=False)
@@ -23,15 +24,17 @@ def test_wait_armable_vehicle(connection_parameters):
 
     engine.vehicle.close()
 
+
 def test_vehicle_mode(connection_parameters):
     engine = Engine(**connection_parameters)
     engine.connect(wait_ready=False)
 
     engine.set_mode('GUIDED')
 
-    assert engine.vehicle.mode.name=='GUIDED'
+    assert engine.vehicle.mode.name == 'GUIDED'
 
     engine.vehicle.close()
+
 
 def test_vehicle_armed(connection_parameters):
     engine = Engine(**connection_parameters)
@@ -42,6 +45,7 @@ def test_vehicle_armed(connection_parameters):
     assert engine.vehicle.armed
 
     engine.vehicle.close()
+
 
 def test_vehicle_armed_and_disarmed(connection_parameters):
     engine = Engine(**connection_parameters)
