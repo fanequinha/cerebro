@@ -54,19 +54,3 @@ def test_vehicle_armed_and_disarmed(connection_parameters):
     assert not engine.vehicle.armed
 
     engine.vehicle.close()
-
-# def test_set_sail():
-#     engine = Engine()
-
-#     engine.connect(True)
-#     print(engine.vehicle.location.global_frame.lat)
-#     print(engine.vehicle.location.global_frame.lon)
-#     engine.goto(-4.6540196, 55.3995094)
-
-#     while engine.vehicle.location.global_frame.lat < -4:
-#         print('Lat:', engine.vehicle.location.global_frame.lat)
-
-#     assert engine.vehicle.location.global_frame.lat == -4.6540196
-#     assert engine.vehicle.location.global_frame.lon == 55.3995094
-
-#     engine.vehicle.close()
