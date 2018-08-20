@@ -27,15 +27,7 @@ def test_vehicle_mode(connection_parameters):
     engine = Engine(**connection_parameters)
     engine.connect(wait_ready=False)
 
-    while not engine.vehicle.is_armable:
-        print(" Waiting for vehicle to initialise...")
-        time.sleep(1)
-
-    assert engine.vehicle.is_armable
-
-    print("\nSet Vehicle.mode = GUIDED (currently: %s)" % engine.vehicle.mode.name)
-
-    engine.set_guided_mode()
+    engine.set_mode('GUIDED')
 
     assert engine.vehicle.mode.name=='GUIDED'
 
@@ -45,15 +37,21 @@ def test_vehicle_armed(connection_parameters):
     engine = Engine(**connection_parameters)
     engine.connect(wait_ready=False)
 
-    while not engine.vehicle.is_armable:
-        print(" Waiting for vehicle to initialise...")
-        time.sleep(1)
-
-    assert engine.vehicle.is_armable
-
     engine.arm()
 
     assert engine.vehicle.armed
+
+    engine.vehicle.close()
+
+def test_vehicle_armed_and_disarmed(connection_parameters):
+    engine = Engine(**connection_parameters)
+    engine.connect(wait_ready=False)
+
+    engine.arm()
+    assert engine.vehicle.armed
+
+    engine.disarm()
+    assert not engine.vehicle.armed
 
     engine.vehicle.close()
 
