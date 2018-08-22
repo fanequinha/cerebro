@@ -58,3 +58,26 @@ A Machine Learning model & engine created to make `fanequiña` aware of it's sur
         >cd commander/
         >./main.py -l
     ```
+
+## Pixhawk configuration
+
+* Initial configuration
+First of all you must install some Ground Station Software (GCS):
+    - http://ardupilot.org/rover/docs/common-install-gcs.html
+
+Secondly upgrade the Pixhawk firmware to the latest "Ardupilot Rover" Firmware
+
+    - http://ardupilot.org/rover/docs/common-loading-firmware-onto-pixhawk.html
+
+* Mandatory Hardware Configuration
+  - http://ardupilot.org/rover/docs/rover-code-configuration.html
+
+* Conecting the receiver
+  - http://ardupilot.org/rover/docs/common-pixhawk-and-px4-compatible-rc-transmitter-and-receiver-systems.html
+
+* Configure Firmware as Boat (“Frame class”)
+
+  >To specify that the vehicle is a boat the FRAME_CLASS parameter should be set to 2 (Boat).
+
+  - http://ardupilot.org/rover/docs/boat-configuration.html#boat-configuration
+  - http://ardupilot.org/rover/docs/balance_bot-configure.html?highlight=frame_class#parameter-configuration
