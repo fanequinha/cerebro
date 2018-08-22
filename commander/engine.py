@@ -1,30 +1,27 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from __future__ import print_function
 
-from dronekit import connect, VehicleMode, LocationGlobal, LocationGlobalRelative
-from pymavlink import mavutil # Needed for command message definitions
-import time
 import math
 
-#@todo move this to settings.py
-DEV=True
+from dronekit import LocationGlobalRelative, connect
+
+import settings
+
 
 class Engine(object):
 
-    def __init__(self, connection_string=""):
+    def __init__(self, connection_string="", baudrate=57600):
         self.connection_string = connection_string
+        self.baudrate = baudrate
 
-        if DEV:
+        if settings.DEVELOPMENT:
             import dronekit_sitl
             sitl = dronekit_sitl.start_default()
             self.connection_string = sitl.connection_string()
-            return
 
-    def connect(self):
-        self._vehicle = connect(self.connection_string)
-        self._vehicle.mode = VehicleMode("GUIDED")
-        self._vehicle.wait_ready()
+    def connect(self, wait_ready=True):
+        self._vehicle = connect(self.connection_string,
+                                baud=self.baudrate,
+                                wait_ready=wait_ready)
 
     @property
     def vehicle(self):
@@ -40,7 +37,7 @@ class Engine(object):
         return self._vehicle.location.global_frame
 
     def wait_until_location(self, latitude, longitude):
-        #@todo Wait until the reached location is in there
+        # @todo Wait until the reached location is in there
         return True
 
 
@@ -48,10 +45,9 @@ class Mision(Engine):
 
     final_lat = 0
     final_lon = 0
-    earth_radio=6378137
+    earth_radio = 6378137
 
     def __init__(self, *args, **kwargs):
-        # super(Mision, self).__init__(*args, **kwargs)
         super(Mision, self).__init__(*args, **kwargs)
         self.connect()
         self.set_start_point(
@@ -67,20 +63,16 @@ class Mision(Engine):
         location = self.location()
         new_lat = location.lat
         dLat = meters/self.earth_radio
-        new_lat = location.lat + dLat * 180/Pi
+        new_lat = location.lat + dLat * 180 / math.Pi
         return self.goto(new_lat, location.lon)
 
     def move_east(self, meters=10):
         location = self.location()
         new_lon = location.lon
-        dLon = meters / ( self.earth_radio * Cos(Pi*lat/180))
-        new_lon = location.lon + dLon * 180/Pi
+        dLon = meters / (self.earth_radio * math.Cos(math.Pi * location.lat / 180))
+        new_lon = location.lon + dLon * 180 / math.Pi
         return self.goto(location.lat, new_lon)
 
     def set_final_location(self, lat, lon):
-        self.final_lat=lat
-        self.final_lon=lon
-
-if __name__ == "__main__":
-    engine = Mision("")
-    engine.connect()
+        self.final_lat = lat
+        self.final_lon = lon
