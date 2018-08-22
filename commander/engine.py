@@ -1,19 +1,20 @@
 from __future__ import print_function
 
 import math
+import time
 
-from dronekit import LocationGlobalRelative, connect
+from dronekit import LocationGlobalRelative, VehicleMode, connect
 
 import settings
 
 
 class Engine(object):
 
-    def __init__(self, connection_string="", baudrate=57600):
+    def __init__(self, connection_string, baudrate):
         self.connection_string = connection_string
         self.baudrate = baudrate
 
-        if settings.DEVELOPMENT:
+        if settings.USE_SITL is True:
             import dronekit_sitl
             sitl = dronekit_sitl.start_default()
             self.connection_string = sitl.connection_string()
@@ -22,6 +23,25 @@ class Engine(object):
         self._vehicle = connect(self.connection_string,
                                 baud=self.baudrate,
                                 wait_ready=wait_ready)
+
+    def set_mode(self, mode):
+        self._vehicle.mode = VehicleMode(mode)
+
+        while not self._vehicle.mode.name == mode:
+            print(" Waiting for mode change to %s..." % mode)
+            time.sleep(1)
+
+    def arm(self):
+        self._vehicle.armed = True
+        while not self._vehicle.armed:
+            print(" Waiting for arming...")
+            time.sleep(1)
+
+    def disarm(self):
+        self._vehicle.armed = False
+        while self._vehicle.armed:
+            print(" Waiting for disarming...")
+            time.sleep(1)
 
     @property
     def vehicle(self):

@@ -16,19 +16,21 @@ def main():
         baud_rate = arg_options.baud_rate
 
     engine = Engine(connection_string, baudrate=baud_rate)
-    engine.connect()
+    engine.connect(wait_ready=False)
     vehicle = engine.vehicle
 
+    while not vehicle.attitude.pitch:
+        print(" Waiting for vehicle to initialise...")
+        import time
+        time.sleep(1)
+
     print(" Autopilot Firmware version: %s" % vehicle.version)
-    print(" System status: %s" % vehicle.system_status.state)
     print(" Mode: %s" % vehicle.mode.name)
+    print(" System status: %s" % vehicle.system_status)
     print(" Armed: %s" % vehicle.armed)
 
     while arg_options.listen:
-        print(vehicle.location.global_frame)
-        print(vehicle.attitude)
-        print(" Velocity: %s" % vehicle.velocity)
-        print(vehicle.gps_0)
+        print(str(vehicle.location.global_frame), str(vehicle.attitude), "Velocity: %s" % vehicle.velocity)
 
 
 def get_parser():

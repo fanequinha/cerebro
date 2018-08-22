@@ -1,7 +1,6 @@
 import os
 
-DEVELOPMENT = os.environ.get('DEVELOPMENT', True)
-
+USE_SITL = os.environ.get('USE_SITL', True)
 # Add your custom serial port
 # (http://python.dronekit.io/guide/connecting_vehicle.html#get-started-connecting)
 DEFAULT_SERIAL_PORT = os.environ.get('SERIAL_PORT', '/dev/cu.usbmodem1')
