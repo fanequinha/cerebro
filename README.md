@@ -81,3 +81,10 @@ Secondly upgrade the Pixhawk firmware to the latest "Ardupilot Rover" Firmware
 
   - http://ardupilot.org/rover/docs/boat-configuration.html#boat-configuration
   - http://ardupilot.org/rover/docs/balance_bot-configure.html?highlight=frame_class#parameter-configuration
+
+
+http://ardupilot.org/rover/docs/rover-motor-and-servo-connections.html?highlight=servo
+
+http://ardupilot.org/rover/docs/common-pixhawk-and-px4-compatible-rc-transmitter-and-receiver-systems.html#common-pixhawk-and-px4-compatible-rc-transmitter-and-receiver-systems
+
+
