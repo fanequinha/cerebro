@@ -14,11 +14,6 @@ class Engine(object):
         self.connection_string = connection_string
         self.baudrate = baudrate
 
-        if settings.USE_SITL is True:
-            import dronekit_sitl
-            sitl = dronekit_sitl.start_default()
-            self.connection_string = sitl.connection_string()
-
     def connect(self, wait_ready=True):
         self._vehicle = connect(self.connection_string,
                                 baud=self.baudrate,
