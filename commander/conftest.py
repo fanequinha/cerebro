@@ -11,7 +11,7 @@ def start_sitl_rover():
     sitl.download('rover', '2.50', verbose=True)
 
     sitl_args = ['-I0', '--model', 'rover','--home=42.2278287,-8.72184010,584,353']
-    sitl.launch(sitl_args, await_ready=True, restart=True, verbose=True)
+    sitl.launch(sitl_args, await_ready=False, restart=True, verbose=True)
     sitl.block_until_ready(verbose=True)
     return sitl
 

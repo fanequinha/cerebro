@@ -47,19 +47,6 @@ def test_vehicle_armed(connection_parameters):
     engine.vehicle.close()
 
 
-def test_vehicle_armed_and_disarmed(connection_parameters):
-    engine = Engine(**connection_parameters)
-    engine.connect(wait_ready=False)
-
-    engine.arm()
-    assert engine.vehicle.armed
-
-    engine.disarm()
-    assert not engine.vehicle.armed
-
-    engine.vehicle.close()
-
-
 def test_set_sail(connection_parameters):
     engine = Engine(**connection_parameters)
 
@@ -74,32 +61,18 @@ def test_set_sail(connection_parameters):
         time.sleep(1)
 
     engine.set_mode('GUIDED')
-    # from dronekit import VehicleMode
-    # engine.vehicle.mode = VehicleMode("GUIDED")
-    print("Taking off!")
-    engine.vehicle.simple_takeoff(10)  # Take off to target altitude
-    #  # Wait until the vehicle reaches a safe height before processing the goto
-    # #  (otherwise the command after Vehicle.simple_takeoff will execute
-    # #   immediately).
-    while True:
-        print(" Altitude: ", engine.vehicle.location.global_relative_frame.alt)
-        # Break and return from function just below target altitude.
-        if engine.vehicle.location.global_relative_frame.alt >= 10 * 0.95:
-            print("Reached target altitude")
-            break
-        time.sleep(1)
 
     print("Set default/target groundspeed to 3")
-    engine.vehicle.groundspeed = 3
+    engine.vehicle.groundspeed = 10
 
-    print(engine.vehicle.location.global_frame.lat)
-    print(engine.vehicle.location.global_frame.lon)
-    engine.goto(-4.6540196, 55.3995094)
+    lat_point = 42.227870
+    long_point = -8.719468
 
-    while engine.vehicle.location.global_frame.lat < -4:
+    engine.goto(lat_point, long_point)
+
+    while engine.vehicle.location.global_frame.lat < lat_point:
         print('Lat:', engine.vehicle.location.global_frame.lat)
 
-    assert engine.vehicle.location.global_frame.lat == -4.6540196
-    assert engine.vehicle.location.global_frame.lon == 55.3995094
+    assert 42.227860 < engine.vehicle.location.global_frame.lat < 42.227890
 
     engine.vehicle.close()
