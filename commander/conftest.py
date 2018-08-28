@@ -1,16 +1,17 @@
 import pytest
-
 from dronekit_sitl import SITL
+
 import settings
 
 
 def start_sitl_rover():
-    '''start a SITL session using sensible defaults.  This should be the simplest way to start a sitl session'''
+    '''start a SITL session using sensible defaults.
+    This should be the simplest way to start a sitl session'''
     print("Starting copter simulator (SITL)")
     sitl = SITL()
     sitl.download('rover', '2.50', verbose=True)
 
-    sitl_args = ['-I0', '--model', 'rover','--home=42.2278287,-8.72184010,584,353']
+    sitl_args = ['-I0', '--model', 'rover', '--home=42.2278287,-8.72184010,584,353']
     sitl.launch(sitl_args, await_ready=False, restart=True, verbose=True)
     sitl.block_until_ready(verbose=True)
     return sitl

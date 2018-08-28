@@ -5,8 +5,6 @@ import time
 
 from dronekit import LocationGlobalRelative, VehicleMode, connect
 
-import settings
-
 
 class Engine(object):
 
