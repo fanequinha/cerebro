@@ -2,24 +2,69 @@
 
 ## Requirements
 
-### Mac installation
+- Python 2.7
+- Pipenv (https://docs.pipenv.org/)
 
-- Download and install [QGroundControl](http://qgroundcontrol.com/downloads).
+## Installation and environment activation
 
-### Radio control installation
+```
+>cd commander/
+>pipenv install
+>pipenv shell
+```
 
-- Download driver from [FTDI chip](http://www.ftdichip.com/Drivers/VCP.htm)
-- Download driver from [Driver page](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers)
-    - Use 10_4_10_5_10_6_10_7 app.
-    - Verify install using command `ls -la /dev/tty.*`
-    
-    
-## Radio control
+## Configure connection environment
 
-- Request the battery.
-- Inside `fanequiña` box, you will find the adapter.
-- Plug the connector at `POWER` connector.
-- Get the antenna, plug it at `TELEM1` plug.
+You must check what port you have to connect depending your OS 
+(http://python.dronekit.io/guide/connecting_vehicle.html#get-started-connecting)
 
-## Reference
-- http://andrewke.org/setting-up-cloned-3dr-telemetry/
+You can configure your own environment with your custom file `.env`:
+
+```
+>copy env.sample .env
+>vim .env
+```
+
+Activate the environment:
+
+```
+>export `cat .env`
+```
+
+
+## First connection
+
+```
+>cd commander/
+>./main.py
+```
+
+## Listen location, attitude, velocity and gps
+
+Default:
+
+```
+>cd commander/
+>./main.py -l
+```
+
+### Optional
+
+* Launch external SITL and connect to it:
+
+*Lauch SITL:*
+
+You must have activated python environment.
+
+```
+> dronekit-sitl rover-2.50 --home=42.2278287,-8.721840100000009,100,353
+```
+
+After SITL is launched you can also connect with your companion software (QGC, MissionPlaner.. ) or
+you can connect with *commander*.
+
+*Connection with SITL  at fixed TCP port:*
+
+```
+>./main.py --connect "tcp:0.0.0.0:5760" -l
+```
