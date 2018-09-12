@@ -6,5 +6,4 @@ sudo apt-get install -y \
     python-dev python-pip python3-pip \
     libopenjp2-7-dev libtiff5-dev
 
-pip install -r commander/req_2.txt
 pip install -r mastermind/req_3.txt
