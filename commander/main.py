@@ -1,9 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import argparse
+import logging
+import time
 
 import settings
-from engine import Engine
+from boat import Boat
+
+logging.basicConfig(
+    format='%(levelname)s : %(module)s : %(asctime)s : %(message)s',
+    filename='commander.log', level=logging.DEBUG)
+
+logger = logging.getLogger(__name__)
 
 
 def main():
@@ -15,22 +23,30 @@ def main():
     if arg_options.baud_rate:
         baud_rate = arg_options.baud_rate
 
-    engine = Engine(connection_string, baudrate=baud_rate)
+    engine = Boat(connection_string, baudrate=baud_rate)
     engine.connect(wait_ready=False)
     vehicle = engine.vehicle
 
     while not vehicle.attitude.pitch:
-        print(" Waiting for vehicle to initialise...")
-        import time
+        logger.debug(" Waiting for vehicle to initialise...")
         time.sleep(1)
 
-    print(" Autopilot Firmware version: %s" % vehicle.version)
-    print(" Mode: %s" % vehicle.mode.name)
-    print(" System status: %s" % vehicle.system_status)
-    print(" Armed: %s" % vehicle.armed)
+    logger.debug("Autopilot Firmware version: %s", vehicle.version)
+    logger.debug("Mode: %s", vehicle.mode.name)
+    logger.debug("System status: %s", vehicle.system_status)
+    logger.debug("Armed: %s", vehicle.armed)
 
     while arg_options.listen:
-        print(str(vehicle.location.global_frame), str(vehicle.attitude), "Velocity: %s" % vehicle.velocity)
+        logger.debug(str(vehicle.location.global_frame), str(vehicle.attitude),
+                     "Velocity: %s" % vehicle.velocity)
+
+    if arg_options.goto:
+        engine.arm()
+        engine.set_mode('GUIDED')
+        lat, lon = arg_options.goto.split(',')
+
+        engine.goto(lat, lon, ground_speed=25)
+        engine.vehicle.close()
 
 
 def get_parser():
@@ -44,6 +60,8 @@ def get_parser():
                         help="Serial baud rate: 57600 | Usb connection: 115200")
     parser.add_argument("-l", "--listen", action='store_true',
                         help="Listen location, attitude, velocity and gps")
+    parser.add_argument("-g", "--goto",
+                        help="Move to a GPS point (Decimal format). Ex. '42.227870, -8.7218401'")
 
     return parser
 
