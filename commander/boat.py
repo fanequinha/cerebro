@@ -62,7 +62,3 @@ class Boat(object):
         lon = self._vehicle.location.global_relative_frame.lon
 
         return lat, lon
-
-    def wait_until_location(self, latitude, longitude):
-        # @todo Wait until the reached location is in there
-        return True
