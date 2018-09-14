@@ -56,8 +56,12 @@ class Boat(object):
             logger.debug('Speed up groundspeed...%s', self._vehicle.groundspeed)
         return
 
-    def location_relative(self):
-        return self._vehicle.location.global_relative_frame
+    @property
+    def location(self):
+        lat = self._vehicle.location.global_relative_frame.lat
+        lon = self._vehicle.location.global_relative_frame.lon
+
+        return lat, lon
 
     def wait_until_location(self, latitude, longitude):
         # @todo Wait until the reached location is in there

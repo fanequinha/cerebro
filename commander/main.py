@@ -23,9 +23,9 @@ def main():
     if arg_options.baud_rate:
         baud_rate = arg_options.baud_rate
 
-    engine = Boat(connection_string, baudrate=baud_rate)
-    engine.connect(wait_ready=False)
-    vehicle = engine.vehicle
+    boat = Boat(connection_string, baudrate=baud_rate)
+    boat.connect(wait_ready=False)
+    vehicle = boat.vehicle
 
     while not vehicle.attitude.pitch:
         logger.debug(" Waiting for vehicle to initialise...")
@@ -37,16 +37,19 @@ def main():
     logger.debug("Armed: %s", vehicle.armed)
 
     while arg_options.listen:
-        logger.debug(str(vehicle.location.global_frame), str(vehicle.attitude),
-                     "Velocity: %s" % vehicle.velocity)
+        listen_data = "Location: %s -  %s - Groundspeed: %s" % \
+                      (boat.location, boat.vehicle.attitude,
+                                         boat.vehicle.groundspeed)
+        logger.debug(listen_data)
+        time.sleep(2)
 
     if arg_options.goto:
-        engine.arm()
-        engine.set_mode('GUIDED')
+        boat.arm()
+        boat.set_mode('GUIDED')
         lat, lon = arg_options.goto.split(',')
 
-        engine.goto(lat, lon, ground_speed=25)
-        engine.vehicle.close()
+        boat.goto(lat, lon)
+        boat.vehicle.close()
 
 
 def get_parser():
@@ -59,7 +62,7 @@ def get_parser():
     parser.add_argument("-b", "--baud-rate", type=int,
                         help="Serial baud rate: 57600 | Usb connection: 115200")
     parser.add_argument("-l", "--listen", action='store_true',
-                        help="Listen location, attitude, velocity and gps")
+                        help="Listen location, attitude and groundspeed")
     parser.add_argument("-g", "--goto",
                         help="Move to a GPS point (Decimal format). Ex. '42.227870, -8.7218401'")
 
