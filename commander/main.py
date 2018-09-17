@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import argparse
-import logging
+import logging.config
 import time
 
 import settings
 from boat import Boat
 
-logging.basicConfig(
-    format='%(levelname)s : %(module)s : %(asctime)s : %(message)s',
-    filename='commander.log', level=logging.DEBUG)
+
+logging.config.dictConfig(settings.LOGGING_CONFIG)
 
 logger = logging.getLogger(__name__)
 

@@ -5,9 +5,6 @@ import time
 
 import dronekit
 
-logging.basicConfig(
-    format='%(levelname)s : %(module)s : %(asctime)s : %(message)s',
-    filename='commander.log', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
