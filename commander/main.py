@@ -7,7 +7,6 @@ import time
 import settings
 from boat import Boat
 
-
 logging.config.dictConfig(settings.LOGGING_CONFIG)
 
 logger = logging.getLogger(__name__)
@@ -38,7 +37,7 @@ def main():
     while arg_options.listen:
         listen_data = "Location: %s -  %s - Groundspeed: %s" % \
                       (boat.location, boat.vehicle.attitude,
-                                         boat.vehicle.groundspeed)
+                       boat.vehicle.groundspeed)
         logger.debug(listen_data)
         time.sleep(2)
 
