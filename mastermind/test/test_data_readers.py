@@ -1,6 +1,6 @@
 import numpy as np
 
-from cerebro.data_readers import read_image_tensorflow, read_image_pil
+from mastermind.data_readers import read_image_tensorflow, read_image_pil
 
 
 def test_default_expected_shape_tensorflow(data_path):
