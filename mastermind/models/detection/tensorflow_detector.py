@@ -5,7 +5,7 @@ class TensorFlowDetector(TensorFlowModel):
     """
     """
     def __init__(
-        self, model, labels, min_score=0.5, input_shape=[1, 128, 128, 3]):
+        self, model, labels, min_score=0.5, input_shape=[1, 300, 300, 3]):
         """
         :param model:
         :param labels:
