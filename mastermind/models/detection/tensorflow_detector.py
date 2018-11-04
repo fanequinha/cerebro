@@ -30,7 +30,7 @@ class TensorFlowDetector(TensorFlowModel):
         """
         boxes, scores, classes = predictions
 
-        indices_to_keep = scores > self.min_score
+        indices_to_keep = scores[0] > self.min_score
 
         classes = self.labels[classes.astype(int)]
 
