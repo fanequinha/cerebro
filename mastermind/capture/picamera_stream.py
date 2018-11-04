@@ -1,3 +1,4 @@
+import time
 from threading import Thread
 
 from picamera import PiCamera
@@ -10,7 +11,7 @@ class PiCameraStream(object):
       Capture frames from PiCamera using separated thread
     """
 
-    def __init__(self, resolution=(300, 300), preview=False):
+    def __init__(self, resolution=(300, 300), preview=False, sleep=False):
         """
         :param resolution:
         :param preview:
@@ -19,6 +20,8 @@ class PiCameraStream(object):
         self.camera.resolution = resolution
         self.camera.vflip = True
         self.camera.hflip = True
+        
+        self.sleep = sleep
 
         self.rgb_array = PiRGBArray(
             self.camera,
@@ -55,4 +58,6 @@ class PiCameraStream(object):
                 return
 
     def read(self):
+        if self.sleep:
+            time.sleep(int(self.sleep))
         return self.frame
