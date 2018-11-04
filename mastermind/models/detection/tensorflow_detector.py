@@ -12,7 +12,6 @@ class TensorFlowDetector(TensorFlowModel):
         :param input_shape:
         """
         super().__init__(
-            self,
             model=model,
             labels=labels,
             input_node="image_tensor",
@@ -33,6 +32,6 @@ class TensorFlowDetector(TensorFlowModel):
 
         indices_to_keep = scores > self.min_score
 
-        classes = self.labels[classes]
+        classes = self.labels[classes.astype(int)]
 
         return boxes[0, indices_to_keep], classes[0, indices_to_keep]
