@@ -1,78 +1,67 @@
 import time
 
-from engine import Engine
+from boat import Boat
 
 
 def test_connection(connection_parameters):
-    engine = Engine(**connection_parameters)
-    engine.connect(wait_ready=False)
+    boat = Boat(**connection_parameters)
+    boat.connect(wait_ready=False)
 
-    assert engine.vehicle is not None
+    assert boat.vehicle is not None
 
-    engine.vehicle.close()
+    boat.vehicle.close()
 
 
 def test_wait_armable_vehicle(connection_parameters):
-    engine = Engine(**connection_parameters)
-    engine.connect(wait_ready=False)
+    boat = Boat(**connection_parameters)
+    boat.connect(wait_ready=False)
 
-    while not engine.vehicle.is_armable:
+    while not boat.vehicle.is_armable:
         print(" Waiting for vehicle to initialise...")
         time.sleep(1)
 
-    assert engine.vehicle.is_armable
+    assert boat.vehicle.is_armable
 
-    engine.vehicle.close()
+    boat.vehicle.close()
 
 
 def test_vehicle_mode(connection_parameters):
-    engine = Engine(**connection_parameters)
-    engine.connect(wait_ready=False)
+    boat = Boat(**connection_parameters)
+    boat.connect(wait_ready=False)
 
-    engine.set_mode('GUIDED')
+    boat.set_mode('GUIDED')
 
-    assert engine.vehicle.mode.name == 'GUIDED'
+    assert boat.vehicle.mode.name == 'GUIDED'
 
-    engine.vehicle.close()
+    boat.vehicle.close()
 
 
 def test_vehicle_armed(connection_parameters):
-    engine = Engine(**connection_parameters)
-    engine.connect(wait_ready=False)
+    boat = Boat(**connection_parameters)
+    boat.connect(wait_ready=False)
 
-    engine.arm()
+    boat.arm()
 
-    assert engine.vehicle.armed
+    assert boat.vehicle.armed
 
-    engine.vehicle.close()
+    boat.vehicle.close()
 
 
 def test_set_sail(connection_parameters):
-    engine = Engine(**connection_parameters)
+    boat = Boat(**connection_parameters)
 
-    engine.connect(True)
-    engine.vehicle.armed = True
-
-    # Confirm vehicle armed before attempting to take off
-    while not engine.vehicle.armed:
-        print(" Waiting for arming...")
-        print(" vehicle mode: %s" % engine.vehicle.mode)
-
-        time.sleep(1)
-
-    engine.set_mode('GUIDED')
-
-    print("Set default/target groundspeed to 3")
-    engine.vehicle.groundspeed = 10
+    boat.connect()
+    boat.arm()
+    boat.set_mode('GUIDED')
 
     lat_point = 42.227870
     long_point = -8.719468
 
-    engine.goto(lat_point, long_point)
+    boat.goto(latitude=lat_point, longitude=long_point, ground_speed=10)
 
-    while engine.vehicle.location.global_frame.lat < lat_point:
-        print('Lat:', engine.vehicle.location.global_frame.lat)
+    while boat.vehicle.location.global_frame.lat < lat_point:
+        time.sleep(1)
 
-    assert 42.227860 < engine.vehicle.location.global_frame.lat < 42.227890
+    assert 42.227860 < boat.vehicle.location.global_frame.lat < 42.227890
 
-    engine.vehicle.close()
+    boat.vehicle.close()

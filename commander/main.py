@@ -1,9 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import argparse
+import logging.config
+import time
 
 import settings
-from engine import Engine
+from boat import Boat
+
+logging.config.dictConfig(settings.LOGGING_CONFIG)
+
+logger = logging.getLogger(__name__)
 
 
 def main():
@@ -15,22 +21,33 @@ def main():
     if arg_options.baud_rate:
         baud_rate = arg_options.baud_rate
 
-    engine = Engine(connection_string, baudrate=baud_rate)
-    engine.connect(wait_ready=False)
-    vehicle = engine.vehicle
+    boat = Boat(connection_string, baudrate=baud_rate)
+    boat.connect(wait_ready=False)
+    vehicle = boat.vehicle
 
     while not vehicle.attitude.pitch:
-        print(" Waiting for vehicle to initialise...")
-        import time
+        logger.debug(" Waiting for vehicle to initialise...")
         time.sleep(1)
 
-    print(" Autopilot Firmware version: %s" % vehicle.version)
-    print(" Mode: %s" % vehicle.mode.name)
-    print(" System status: %s" % vehicle.system_status)
-    print(" Armed: %s" % vehicle.armed)
+    logger.debug("Autopilot Firmware version: %s", vehicle.version)
+    logger.debug("Mode: %s", vehicle.mode.name)
+    logger.debug("System status: %s", vehicle.system_status)
+    logger.debug("Armed: %s", vehicle.armed)
 
     while arg_options.listen:
-        print(str(vehicle.location.global_frame), str(vehicle.attitude), "Velocity: %s" % vehicle.velocity)
+        listen_data = "Location: %s -  %s - Groundspeed: %s" % \
+                      (boat.location, boat.vehicle.attitude,
+                       boat.vehicle.groundspeed)
+        logger.debug(listen_data)
+        time.sleep(2)
+
+    if arg_options.goto:
+        boat.arm()
+        boat.set_mode('GUIDED')
+        lat, lon = arg_options.goto.split(',')
+
+        boat.goto(lat, lon)
+        boat.vehicle.close()
 
 
 def get_parser():
@@ -43,7 +60,9 @@ def get_parser():
     parser.add_argument("-b", "--baud-rate", type=int,
                         help="Serial baud rate: 57600 | Usb connection: 115200")
     parser.add_argument("-l", "--listen", action='store_true',
-                        help="Listen location, attitude, velocity and gps")
+                        help="Listen location, attitude and groundspeed")
+    parser.add_argument("-g", "--goto",
+                        help="Move to a GPS point (Decimal format). Ex. '42.227870, -8.7218401'")
 
     return parser
 
