@@ -11,9 +11,9 @@ from capture import PiCameraStream
 from models import TensorFlowDetector
 
 
-def process_stream(detector=None, labels=None, output=None, sleep=False):
+def process_stream(detector=None, labels=None, output=None, sleep=False, preview=False):
 
-    stream = PiCameraStream(sleep=sleep)
+    stream = PiCameraStream(sleep=sleep, preview=preview)
     if output is not None:
         print(output)
         Path(output).mkdir(parents=True, exist_ok=True)
@@ -31,9 +31,10 @@ def process_stream(detector=None, labels=None, output=None, sleep=False):
                 image = stream.read()
                 image = np.expand_dims(image, 0)
                 if model:
-                    predictions = model.predict(image)
-                    print("prediction", predictions)
+                    predictions = model(image)
+                    print(predictions[1])
                 if output:
+                    print("Saving image")
                     Image.fromarray(image[0]).save("{}/{}.jpg".format(output, time.time()))
 
     except KeyboardInterrupt:
@@ -55,6 +56,9 @@ def get_parser():
     parser.add_argument(
         "-s", "--sleep",
         help="Time to wait between image captures")    
+    parser.add_argument(
+        "-p", "--preview",
+        help="Visualize the capture")
     return parser
 
 if __name__ == "__main__":
