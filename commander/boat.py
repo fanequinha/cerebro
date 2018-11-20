@@ -5,6 +5,7 @@ import time
 
 import dronekit
 
+import utils
 logger = logging.getLogger(__name__)
 
 
@@ -52,6 +53,13 @@ class Boat(object):
             time.sleep(1)
             logger.debug('Speed up groundspeed...%s', self._vehicle.groundspeed)
         return
+
+    def moveto(self, x, y):
+        destination = utils.get_location_metres(
+            self.vehicle.location.global_relative_frame, x, y)
+        self._vehicle.simple_goto(destination, groundspeed=None)
+        return destination
+
 
     @property
     def location(self):
