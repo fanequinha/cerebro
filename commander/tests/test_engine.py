@@ -65,3 +65,19 @@ def test_set_sail(connection_parameters):
     assert 42.227860 < boat.vehicle.location.global_frame.lat < 42.227890
 
     boat.vehicle.close()
+
+
+def test_move_east_in_meters(connection_parameters):
+    boat = Boat(**connection_parameters)
+
+    boat.connect()
+    boat.arm()
+    boat.set_mode('GUIDED')
+
+    #home point is 42.2278287,-8.72184010,584
+    new_point = boat.moveto(10, 0)
+
+    while boat.vehicle.location.global_frame.lat < new_point.lat:
+        time.sleep(1)
+
+    boat.vehicle.close()
