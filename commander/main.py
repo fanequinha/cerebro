@@ -3,9 +3,14 @@
 import argparse
 import logging.config
 import time
+import json
+
+import broker.hub as Broker
 
 import settings
 from boat import Boat
+
+pub = Broker.Publisher(port=5555)
 
 logging.config.dictConfig(settings.LOGGING_CONFIG)
 
@@ -35,10 +40,15 @@ def main():
     logger.debug("Armed: %s", vehicle.armed)
 
     while arg_options.listen:
-        listen_data = "Location: %s -  %s - Groundspeed: %s" % \
-                      (boat.location, boat.vehicle.attitude,
-                       boat.vehicle.groundspeed)
-        logger.debug(listen_data)
+
+        # new PUB/ SUB zmq interface
+        listen_data = {
+            "location": str(boat.location),
+            "attitude": str(boat.vehicle.attitude),
+            "groundspeed": str(boat.vehicle.groundspeed)
+        }
+        pub.send("TLM", listen_data)
+
         time.sleep(2)
 
     if arg_options.goto:
