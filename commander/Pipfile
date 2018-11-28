@@ -7,6 +7,7 @@ name = "pypi"
 dronekit = "*"
 dronekit-sitl = "*"
 pyserial = "*"
+pyzmq = "*"
 
 [dev-packages]
 "flake8" = "*"

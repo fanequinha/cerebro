@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import logging
 import time
+import utils
 
 import dronekit
 
@@ -53,6 +54,12 @@ class Boat(object):
             logger.debug('Speed up groundspeed...%s', self._vehicle.groundspeed)
         return
 
+    def moveto(self, x, y):
+        destination = utils.get_location_metres(
+            self.vehicle.location.global_relative_frame, x, y)
+        self._vehicle.simple_goto(destination, groundspeed=None)
+        return destination
+        
     @property
     def location(self):
         lat = self._vehicle.location.global_relative_frame.lat
