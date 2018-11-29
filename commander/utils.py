@@ -1,6 +1,7 @@
 import math
 from dronekit import LocationGlobal, LocationGlobalRelative
 
+
 def get_location_metres(original_location, dNorth, dEast):
     """
     Returns a LocationGlobal object containing the latitude/longitude `dNorth` and `dEast` metres from the
@@ -32,4 +33,4 @@ def get_location_metres(original_location, dNorth, dEast):
 
     else:
         raise Exception("Invalid Location object passed")
-        return targetlocation 
+        return targetlocation

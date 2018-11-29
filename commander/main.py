@@ -23,9 +23,9 @@ def messageLoop(boat):
     TIMER_10HZ = 0.100        # 100 ms
 
     while True:
-        if ((ticker % 1 )== 0):        # 10 Hz
+        if ((ticker % 1) == 0):        # 10 Hz
             pass
-        if ((ticker % 2) == 0):        #  5 Hz
+        if ((ticker % 2) == 0):        # 5 Hz
             loc = boat.vehicle.location.global_frame
 
             # new PUB/ SUB zmq interface
@@ -45,7 +45,7 @@ def messageLoop(boat):
             }
             pub.send("POS", the_data)
 
-        if ((ticker % 10) == 0):      #  1 Hz
+        if ((ticker % 10) == 0):      # 1 Hz
             the_data = {
                 "battery": {
                     "voltage": boat.vehicle.battery.voltage,
@@ -82,17 +82,16 @@ def main():
         logger.debug(" Waiting for vehicle to initialise...")
         time.sleep(1)
 
-
-    pub.send("DBG","Autopilot: {!s}".format(vehicle.version))
-    #logger.debug("Autopilot Firmware version: %s", vehicle.version)
-    pub.send("DBG","Mode: {}".format(vehicle.mode.name))
+    pub.send("DBG", "Autopilot: {!s}".format(vehicle.version))
+    # logger.debug("Autopilot Firmware version: %s", vehicle.version)
+    pub.send("DBG", "Mode: {}".format(vehicle.mode.name))
     # logger.debug("Mode: %s", vehicle.mode.name)
     # pub.send("DBG", "System status: {}".format(vehicle.system_status))
     # logger.debug("System status: %s", vehicle.system_status)
     pub.send("DBG", "Armed: {}".format(vehicle.armed))
     # logger.debug("Armed: %s", vehicle.armed)
 
-    print (boat.vehicle.groundspeed)
+    # print (boat.vehicle.groundspeed)
 
     if arg_options.listen:
         messageLoop(boat)
