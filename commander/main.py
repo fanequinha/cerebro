@@ -3,7 +3,6 @@
 import argparse
 import logging.config
 import time
-import json
 
 import broker.hub as Broker
 
@@ -15,6 +14,55 @@ pub = Broker.Publisher(port=5555)
 logging.config.dictConfig(settings.LOGGING_CONFIG)
 
 logger = logging.getLogger(__name__)
+
+
+def messageLoop(boat):
+    # set timer for different frequency of message update; multiples of 100ms (10Hz)
+    # don't worry about processing times etc
+    ticker = 0              # multiples of 10Hz
+    TIMER_10HZ = 0.100        # 100 ms
+
+    while True:
+        if ((ticker % 1 )== 0):        # 10 Hz
+            pass
+        if ((ticker % 2) == 0):        #  5 Hz
+            loc = boat.vehicle.location.global_frame
+
+            # new PUB/ SUB zmq interface
+            the_data = {
+                "location": {
+                    "lat": loc.lat,
+                    "lon": loc.lon,
+                    "alt": loc.alt
+                },
+                "heading": boat.vehicle.heading,
+                "attitude": {
+                    "roll": boat.vehicle.attitude.roll,
+                    "pitch": boat.vehicle.attitude.pitch,
+                    "yaw": boat.vehicle.attitude.yaw
+                },
+                "groundspeed": str(boat.vehicle.groundspeed)
+            }
+            pub.send("POS", the_data)
+
+        if ((ticker % 10) == 0):      #  1 Hz
+            the_data = {
+                "battery": {
+                    "voltage": boat.vehicle.battery.voltage,
+                    "current": boat.vehicle.battery.current,
+                    "level": boat.vehicle.battery.level
+                },
+                "armed": boat.vehicle.armed,
+                "mode": boat.vehicle.mode.name,
+                "gps": {
+                    "fix_type": boat.vehicle.gps_0.fix_type,
+                    "num_sats": boat.vehicle.gps_0.satellites_visible
+                }
+            }
+            pub.send("STS", the_data)
+
+        ticker += 1
+        time.sleep(TIMER_10HZ)
 
 
 def main():
@@ -34,22 +82,20 @@ def main():
         logger.debug(" Waiting for vehicle to initialise...")
         time.sleep(1)
 
-    logger.debug("Autopilot Firmware version: %s", vehicle.version)
-    logger.debug("Mode: %s", vehicle.mode.name)
-    logger.debug("System status: %s", vehicle.system_status)
-    logger.debug("Armed: %s", vehicle.armed)
 
-    while arg_options.listen:
+    pub.send("DBG","Autopilot: {!s}".format(vehicle.version))
+    #logger.debug("Autopilot Firmware version: %s", vehicle.version)
+    pub.send("DBG","Mode: {}".format(vehicle.mode.name))
+    # logger.debug("Mode: %s", vehicle.mode.name)
+    # pub.send("DBG", "System status: {}".format(vehicle.system_status))
+    # logger.debug("System status: %s", vehicle.system_status)
+    pub.send("DBG", "Armed: {}".format(vehicle.armed))
+    # logger.debug("Armed: %s", vehicle.armed)
 
-        # new PUB/ SUB zmq interface
-        listen_data = {
-            "location": str(boat.location),
-            "attitude": str(boat.vehicle.attitude),
-            "groundspeed": str(boat.vehicle.groundspeed)
-        }
-        pub.send("TLM", listen_data)
+    print (boat.vehicle.groundspeed)
 
-        time.sleep(2)
+    if arg_options.listen:
+        messageLoop(boat)
 
     if arg_options.goto:
         boat.arm()
