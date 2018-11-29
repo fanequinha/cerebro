@@ -21,6 +21,7 @@ class Publisher(object):
         json_string = base64.b64encode(json.dumps(message))
         self.socket.send("%s %s" % (topic, json_string))
 
+
 # ------------------------------
 class Suscriber(object):
 
@@ -28,7 +29,7 @@ class Suscriber(object):
         context = zmq.Context()
         self.socket = context.socket(zmq.SUB)
         self.port = port
-        self.ip = ip 
+        self.ip = ip
 
     # --------
     def connect(self):
@@ -46,11 +47,11 @@ class Suscriber(object):
         """
         for topic in topics:
             self.socket.setsockopt(zmq.SUBSCRIBE, topic)
-        
+
         rcvd = self.socket.recv()
         topic, msg = rcvd.split()
         msg = base64.b64decode(msg)
-        
+
         print ("[%s] Received message: %s" % (topic, msg))
 
         return (topic, json.loads(msg))
@@ -72,7 +73,7 @@ class Suscriber(object):
 
             return (topic, json.loads(msg))
 
-        except zmq.ZMQError :
+        except zmq.ZMQError:
             topic = 'BOO'
             return ('BOO', None)
 
@@ -88,7 +89,7 @@ def main():
         while topic != 'BOO':
             topic, message = bksrv.peek(["POS", "STS", "DBG"])
             if (topic != 'BOO'):
-                print("Received [%d][%s] message:" % (count,topic))
+                print("Received [%d][%s] message:" % (count, topic))
                 print (json.dumps(message, indent=4, sort_keys=True))
                 count += 1
             sys.stdout.write("#")
@@ -100,4 +101,3 @@ def main():
 if __name__ == "__main__":
 
     main()
-    
