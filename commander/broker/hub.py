@@ -1,13 +1,13 @@
 import zmq
-import socket
 import sys
 import json
 import time
 import base64
 
+
 # ------------------------------
 class Publisher(object):
-    
+
     def __init__(self, port):
         self.port = port
         context = zmq.Context()
@@ -18,7 +18,6 @@ class Publisher(object):
 
     # --------
     def send(self, topic, message):
-        
         json_string = base64.b64encode(json.dumps(message))
         self.socket.send("%s %s" % (topic, json_string))
 
@@ -29,8 +28,7 @@ class Suscriber(object):
         context = zmq.Context()
         self.socket = context.socket(zmq.SUB)
         self.port = port
-        self.ip = ip
-        
+        self.ip = ip 
 
     # --------
     def connect(self):
@@ -48,7 +46,6 @@ class Suscriber(object):
         """
         for topic in topics:
             self.socket.setsockopt(zmq.SUBSCRIBE, topic)
-
         
         rcvd = self.socket.recv()
         topic, msg = rcvd.split()
@@ -75,7 +72,7 @@ class Suscriber(object):
 
             return (topic, json.loads(msg))
 
-        except zmq.ZMQError as e:
+        except zmq.ZMQError :
             topic = 'BOO'
             return ('BOO', None)
 
@@ -101,6 +98,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import sys
 
     main()
+    
