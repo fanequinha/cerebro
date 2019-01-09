@@ -21,7 +21,7 @@ You must check what port you have to connect depending your OS
 You can configure your own environment with your custom file `.env`:
 
 ```
->copy env.sample .env
+>copy .env.sample .env
 >vim .env
 ```
 
