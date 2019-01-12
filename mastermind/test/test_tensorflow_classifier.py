@@ -18,13 +18,13 @@ def test_key_error_if_input_node_not_in_graph(data_path):
 def test_key_error_if_output_nodes_not_in_graph(data_path):
     with pytest.raises(KeyError):
         TensorFlowClassifier(
-            model=str(data_path / "example_imagenet_classifier.pb),
+            model=str(data_path / "example_imagenet_classifier.pb"),
             labels=str(data_path / "imagenet_labels.txt"))
 
 
 def test_labels_are_correctly_loaded(data_path):
     model = TensorFlowClassifier(
-        model=str(data_path / "example_imagenet_classifier.pb),
+        model=str(data_path / "example_imagenet_classifier.pb"),
         labels=str(data_path / "imagenet_labels.txt"),
         output_nodes=["MobilenetV2/Predictions/Reshape_1"])
     # implicitly checks if labels is a numpy array instance
