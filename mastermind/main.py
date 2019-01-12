@@ -11,9 +11,9 @@ from capture import PiCameraStream
 from models import TensorFlowDetector
 
 
-def process_stream(detector=None, labels=None, output=None, sleep=False, preview=False):
+def process_stream(detector=None, labels=None, output=None, force_sleep=None, preview=False):
 
-    stream = PiCameraStream(sleep=sleep, preview=preview)
+    stream = PiCameraStream(force_sleep=force_sleep, preview=preview)
     if output is not None:
         print(output)
         Path(output).mkdir(parents=True, exist_ok=True)
@@ -54,8 +54,8 @@ def get_parser():
         "-o", "--output",
         help="Output path where captured images will be stored")
     parser.add_argument(
-        "-s", "--sleep",
-        help="Time to wait between image captures")    
+        "-s", "--force_sleep",
+        help="Force the stream to wait between N seconds between image captures")    
     parser.add_argument(
         "-p", "--preview",
         help="Visualize the capture")
