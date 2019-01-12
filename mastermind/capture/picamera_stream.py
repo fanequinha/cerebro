@@ -11,7 +11,7 @@ class PiCameraStream(object):
       Capture frames from PiCamera using separated thread
     """
 
-    def __init__(self, resolution=(300, 300), preview=False, force_sleep=False):
+    def __init__(self, resolution=(300, 300), preview=False, force_sleep=None):
         """
         :param resolution:
         :param preview:
@@ -58,6 +58,6 @@ class PiCameraStream(object):
                 return
 
     def read(self):
-        if self.force_sleep:
-            sleep(int(self.sleep))
+        if self.force_sleep is not None:
+            sleep(int(self.force_sleep))
         return self.frame
