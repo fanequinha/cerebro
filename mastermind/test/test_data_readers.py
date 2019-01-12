@@ -12,7 +12,7 @@ def test_default_expected_shape_pil(data_path):
     assert list(image.shape) == [1, 299, 299, 3]
 
 def test_default_normalization_tensorflow(data_path):
-    image = read_image_tensorflow(str(data_path / "imagenet_hotdog.jpeg))
+    image = read_image_tensorflow(str(data_path / "imagenet_hotdog.jpeg"))
     assert np.all(image <= 1.)
     assert np.all(image >= 0.)
     
