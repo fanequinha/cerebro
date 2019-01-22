@@ -23,7 +23,7 @@ class Broker(object):
         self._pairs = []
 
     def __del__(self):
-        ioloop.IOLoop.instance().stop()        
+        ioloop.IOLoop.instance().stop()
 
     def setPublisher(self, port):
         self._publisher = _Publisher(port)
@@ -38,14 +38,13 @@ class Broker(object):
     def suscribe(self, topics, callback):
         self._suscriber.suscribe(topics, callback)
 
-    # --------
     def listen(self):
         """
         Starts polling the suscribed/ peer sockets already connected to
         Blocks the process/ thread that called it
         """
         ioloop.IOLoop.current(instance=True).start()
-    
+
     def peek(self, topics):
         return self._suscriber.peek(topics)
 
@@ -60,7 +59,7 @@ class _Publisher(object):
         context = zmq.Context()
         self.socket = context.socket(zmq.PUB)
         self.socket.bind("tcp://*:%d" % (self.port))
-        print ("ZeroMQ Publisher bound on tcp://*:%d" % (self.port))
+        print ("ZeroMQ Publisher bound on tcp://*:%d" % self.port)
 
     def send(self, topic, message):
         json_string = encode(json.dumps(message))
@@ -110,4 +109,4 @@ class _Suscriber(object):
 
         except zmq.ZMQError:
             topic = 'BOO'
-            return ('BOO', None)
+            return (topic, None)
