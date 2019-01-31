@@ -76,11 +76,11 @@ class _Suscriber(object):
         self._stream_sub = None
 
     def connect(self):
-            print("Connecting Suscriber to tcp://%s:%d" % (self.ip, self.port))
-            errok = self.socket.connect("tcp://%s:%d" % (self.ip, self.port))
-            if (errok):
-                print("Connection returned error: ")
-                print(errok)
+        print("Connecting Suscriber to tcp://%s:%d" % (self.ip, self.port))
+        errok = self.socket.connect("tcp://%s:%d" % (self.ip, self.port))
+        if (errok):
+            print("Connection returned error: ")
+            print(errok)
 
     def suscribe(self, topics, callback):
         """
