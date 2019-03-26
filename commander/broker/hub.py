@@ -50,9 +50,10 @@ class Publisher(object):
         print("ZeroMQ Publisher bound on tcp://*:%d" % self.port)
 
     def send(self, topic, message):
+        # message['type'] = message
+        # self.socket.send_json(message)
         json_string = json.dumps(message)
         self.socket.send("%s %s" % (topic, json_string))
-        self.socket.send_json(message)
 
 
 class Suscriber(object):

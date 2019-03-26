@@ -28,7 +28,7 @@ def messageLoop(boat):
             loc = boat.vehicle.location.global_frame
 
             # new PUB/ SUB zmq interface
-            the_data = {
+            data = {
                 "location": {
                     "lat": loc.lat,
                     "lon": loc.lon,
@@ -42,10 +42,11 @@ def messageLoop(boat):
                 },
                 "groundspeed": str(boat.vehicle.groundspeed)
             }
-            hub.publish("POS", the_data)
+            # logger.debug("Publishing position: %s", data)
+            hub.publish("POS", data)
 
         if ((ticker % 10) == 0):      # 1 Hz
-            the_data = {
+            data = {
                 "battery": {
                     "voltage": boat.vehicle.battery.voltage,
                     "current": boat.vehicle.battery.current,
@@ -58,7 +59,8 @@ def messageLoop(boat):
                     "num_sats": boat.vehicle.gps_0.satellites_visible
                 }
             }
-            hub.publish("STS", the_data)
+            logger.debug("Publishing vehicle info: %s", data)
+            hub.publish("STS", data)
 
         ticker += 1
         time.sleep(TIMER_10HZ)
