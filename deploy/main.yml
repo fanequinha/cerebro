@@ -1,0 +1,44 @@
+---
+- name: Commander
+  hosts: rpi
+  vars:
+      deploy_user: '{{ ansible_user_id }}'
+      app:
+        dir: '/opt/fanequinha/'
+      services:
+        - name: 'commander'
+          template: systemd_commander.service
+          working_directory: '{{ app.dir }}/commander'
+        - name: 'datamgr'
+          template: systemd_datamgr.service
+          working_directory: '{{ app.dir }}/datamgr'
+  tasks:
+    - name: install systemd unit
+      template:
+        src: '{{ item.template }}'
+        dest: '{{ ansible_user_dir }}/.config/systemd/user/{{ item.name }}.service'
+      loop: '{{ services }}'
+      register: 'install_systemd_services'
+
+    - name: reload systemd config
+      systemd:
+        scope: user
+        daemon_reload: yes
+      when: install_systemd_services.changed
+      notify:
+          - restart services
+
+    - name: enable systemd units
+      systemd:
+        scope: user
+        enabled: yes
+        name: '{{ item.name }}'
+      loop: '{{ services }}'
+
+  handlers:
+    - name: "restart services"
+      systemd:
+        scope: user
+        state: restarted
+        name: '{{ item.name }}'
+      loop: '{{ services }}'
