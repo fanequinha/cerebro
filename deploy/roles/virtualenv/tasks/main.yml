@@ -1,0 +1,24 @@
+---
+- name: create virtualenv
+  command: '{{ virtualenv_python }} -m venv .venv --without-pip'
+  args:
+    chdir: '{{ virtualenv_basedir }}'
+    creates: '{{ virtualenv_basedir }}/.venv/bin/python'
+- name: get pip
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: '{{ virtualenv_basedir }}/.venv/bin/get-pip.py'
+- name: install pip
+  command: .venv/bin/python .venv/bin/get-pip.py
+  args:
+    chdir: '{{ virtualenv_basedir }}'
+    creates: '{{ virtualenv_basedir }}/.venv/bin/pip'
+- name: install latest versions pip, pipenv, wheel and setuptools
+  pip:
+    name:
+      - pip
+      - pipenv
+      - wheel
+      - setuptools
+    executable: '{{ virtualenv_basedir }}/.venv/bin/pip'
+    extra_args: '--upgrade'

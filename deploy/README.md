@@ -1,5 +1,8 @@
 # Deploy commander, datamgr and mastermind
 
+
+Deploy in production:
+
 ```
-$ ansible-playbook -i inventories/production/hosts services.yml
+$ ansible-playbook -i inventories/production/hosts deploy.yml
 ```

@@ -4,7 +4,7 @@
   vars:
       deploy_user: '{{ ansible_user_id }}'
       app:
-        dir: '/opt/fanequinha/'
+        dir: '{{ ansible_user_dir }}/fanequinha/'
       services:
         - name: 'commander'
           template: systemd_commander.service
@@ -13,6 +13,36 @@
           template: systemd_datamgr.service
           working_directory: '{{ app.dir }}/datamgr'
   tasks:
+    # Create virtual envs
+    # ###################
+    - name: "source code"
+      git:
+          repo: https://github.com/fanequinha/cerebro.git
+          version: 'master'
+          dest: "{{ app.dir }}"
+      notify:
+          - restart services
+    # Create virtual envs
+    # ###################
+    - include_role:
+        name: virtualenv
+      vars:
+        virtualenv_basedir: '{{ item.working_directory }}'
+        virtualenv_python: python3.6
+      loop: '{{ services }}'
+
+    # Install packages
+    # ################
+    - name: install libraries
+      command: '{{ item.working_directory }}/.venv/bin/pipenv install --deploy'
+      args:
+        chdir: '{{ item.working_directory }}'
+      environment:
+        PIPENV_VENV_IN_PROJECT: true
+      loop: '{{ services }}'
+
+    # Create services daemons
+    # #######################
     - name: install systemd unit
       template:
         src: '{{ item.template }}'

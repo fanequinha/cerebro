@@ -1,18 +1,17 @@
 [Unit]
 Description=Fanequinha Data Manager Service
-After=systemd-modules-load.service rc-local.service
+After=network.target
 
 [Service]
-#Environment=
 WorkingDirectory={{ item.working_directory }}
 
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=fnq-commander
+SyslogIdentifier={{ item.name }}
 
-#Nice=-5
-ExecStart=/usr/local/bin/pipenv run /opt/fanequinha/datamgr/main.py
+ExecStart={{ item.working_directory }}/.venv/bin/pipenv run {{ item.working_directory }}/main.py
 Restart=always
+RestartSec=3
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
