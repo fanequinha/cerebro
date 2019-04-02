@@ -1,6 +1,6 @@
 ---
 - name: Commander
-  hosts: rpi
+  hosts: fanepi
   vars:
       deploy_user: '{{ ansible_user_id }}'
       app:
