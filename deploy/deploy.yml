@@ -8,12 +8,12 @@
       services:
         - name: 'commander'
           template: systemd_commander.service
-          working_directory: '{{ app.dir }}/commander'
+          working_directory: '{{ app.dir }}commander'
           python_version: python2.7
         - name: 'datamgr'
           template: systemd_datamgr.service
-          working_directory: '{{ app.dir }}/datamgr'
-          python_version: python3.5
+          working_directory: '{{ app.dir }}datamgr'
+          python_version: python3.6
   tasks:
     # Create virtual envs
     # ###################
