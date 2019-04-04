@@ -17,7 +17,7 @@ def start_sitl_rover():
     return sitl
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def connection_parameters():
     connection_string = settings.DEFAULT_SERIAL_PORT
     baud_rate = settings.DEFAULT_BAUD_RATE
