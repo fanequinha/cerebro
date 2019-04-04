@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-dronekit = "*"
 dronekit-sitl = "*"
 pyserial = "*"
 pyzmq = "*"
 tornado = "*"
+dronekit = {file = "https://github.com/dronekit/dronekit-python.git"}
 
 [dev-packages]
 "flake8" = "*"
@@ -18,4 +18,4 @@ pylint = "<2.0.0"
 pytest = "*"
 
 [requires]
-python_version = "2.7"
+python_version = "3.6"
