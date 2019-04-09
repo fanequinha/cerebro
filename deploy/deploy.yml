@@ -9,7 +9,7 @@
         - name: 'commander'
           template: systemd_commander.service
           working_directory: '{{ app.dir }}commander'
-          python_version: python2.7
+          python_version: python3.6
         - name: 'datamgr'
           template: systemd_datamgr.service
           working_directory: '{{ app.dir }}datamgr'
@@ -45,6 +45,11 @@
 
     # Create services daemons
     # #######################
+    - name: create systemd user folder
+      file:
+        path: '{{ ansible_user_dir }}/.config/systemd/user'
+        state: directory
+
     - name: install systemd unit
       template:
         src: '{{ item.template }}'
