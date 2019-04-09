@@ -1,0 +1,81 @@
+---
+- name: Commander
+  hosts: fanepi
+  vars:
+      deploy_user: '{{ ansible_user_id }}'
+      app:
+        dir: '{{ ansible_user_dir }}/fanequinha/'
+      services:
+        - name: 'commander'
+          template: systemd_commander.service
+          working_directory: '{{ app.dir }}commander'
+          python_version: python3.6
+        - name: 'datamgr'
+          template: systemd_datamgr.service
+          working_directory: '{{ app.dir }}datamgr'
+          python_version: python3.6
+  tasks:
+    # Create virtual envs
+    # ###################
+    - name: "source code"
+      git:
+          repo: https://github.com/fanequinha/cerebro.git
+          version: 'master'
+          dest: "{{ app.dir }}"
+      notify:
+          - restart services
+    # Create virtual envs
+    # ###################
+    - include_role:
+        name: virtualenv
+      vars:
+        virtualenv_basedir: '{{ item.working_directory }}'
+        virtualenv_python: '{{ item.python_version }}'
+      loop: '{{ services }}'
+
+    # Install packages
+    # ################
+    - name: install libraries
+      command: '{{ item.working_directory }}/.venv/bin/pipenv install --deploy'
+      args:
+        chdir: '{{ item.working_directory }}'
+      environment:
+        PIPENV_VENV_IN_PROJECT: true
+      loop: '{{ services }}'
+
+    # Create services daemons
+    # #######################
+    - name: create systemd user folder
+      file:
+        path: '{{ ansible_user_dir }}/.config/systemd/user'
+        state: directory
+
+    - name: install systemd unit
+      template:
+        src: '{{ item.template }}'
+        dest: '{{ ansible_user_dir }}/.config/systemd/user/{{ item.name }}.service'
+      loop: '{{ services }}'
+      register: 'install_systemd_services'
+
+    - name: reload systemd config
+      systemd:
+        scope: user
+        daemon_reload: yes
+      when: install_systemd_services.changed
+      notify:
+          - restart services
+
+    - name: enable systemd units
+      systemd:
+        scope: user
+        enabled: yes
+        name: '{{ item.name }}'
+      loop: '{{ services }}'
+
+  handlers:
+    - name: "restart services"
+      systemd:
+        scope: user
+        state: restarted
+        name: '{{ item.name }}'
+      loop: '{{ services }}'

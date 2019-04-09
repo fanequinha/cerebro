@@ -1,0 +1,17 @@
+[Unit]
+Description=Fanequinha Commander Service
+After=network.target
+
+[Service]
+WorkingDirectory={{ item.working_directory }}
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier={{ item.name }}
+
+ExecStart={{ item.working_directory }}/.venv/bin/pipenv run {{ item.working_directory }}/main.py -l
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target
